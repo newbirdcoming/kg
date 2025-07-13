@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.HaseventsMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.pojo.Hasevents">
+            <result property="event_id" column="event_id" jdbcType="VARCHAR"/>
+            <result property="event_risk_id" column="event_risk_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        event_id,event_risk_id
+    </sql>
+</mapper>

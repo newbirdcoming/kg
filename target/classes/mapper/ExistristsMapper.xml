@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ExistristsMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.pojo.Existrists">
+            <result property="entity_hazard_id" column="entity_hazard_id" jdbcType="VARCHAR"/>
+            <result property="risk_id" column="risk_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        entity_hazard_id,risk_id
+    </sql>
+</mapper>

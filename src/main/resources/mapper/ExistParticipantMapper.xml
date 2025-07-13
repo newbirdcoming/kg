@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.mapper.ExistParticipantMapper">
+
+    <resultMap id="BaseResultMap" type="com.kg.pojo.ExistParticipant">
+            <result property="hazardId" column="hazard_id" jdbcType="VARCHAR"/>
+            <result property="participantId" column="participant_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        hazard_id,participant_id
+    </sql>
+</mapper>

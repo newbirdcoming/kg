@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.RequestInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.pojo.RequestInfo">
+            <result property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="time" column="time" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="subject" column="subject" jdbcType="VARCHAR"/>
+            <result property="recipient" column="recipient" jdbcType="VARCHAR"/>
+            <result property="hazard" column="hazard" jdbcType="VARCHAR"/>
+            <result property="risk" column="risk" jdbcType="VARCHAR"/>
+            <result property="event" column="event" jdbcType="VARCHAR"/>
+            <result property="consequence" column="consequence" jdbcType="VARCHAR"/>
+            <result property="requestTopicCategory1" column="request_topic_category1" jdbcType="VARCHAR"/>
+            <result property="requestTopicCategory2" column="request_topic_category2" jdbcType="VARCHAR"/>
+            <result property="requestTopicCategory3" column="request_topic_category3" jdbcType="VARCHAR"/>
+            <result property="participants" column="participants" jdbcType="VARCHAR"/>
+            <result property="resources" column="resources" jdbcType="VARCHAR"/>
+            <result property="participantActivities" column="participant_activities" jdbcType="VARCHAR"/>
+            <result property="goal" column="goal" jdbcType="VARCHAR"/>
+            <result property="collaborationNetwork" column="collaboration_network" jdbcType="VARCHAR"/>
+            <result property="collaborationNetworkActivities" column="collaboration_network_activities" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,time,address,
+        subject,recipient,hazard,
+        risk,event,consequence,
+        request_topic_category1,request_topic_category2,request_topic_category3,
+        participants,resources,participant_activities,
+        goal,collaboration_network,collaboration_network_activities
+    </sql>
+</mapper>

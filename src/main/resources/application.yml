@@ -1,0 +1,24 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /kg
+spring:
+  datasource:
+#    9-20之前的
+#    url: jdbc:mysql://localhost:3306/kg_community1?useSSL=false
+#    9-20新增参与者地点等信息
+    url: jdbc:mysql://localhost:3306/kg_seventeen?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useLegacyDatetimeCode=false
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.jdbc.Driver
+mybatis-plus:
+  type-aliases-package: com.kg.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:xml/*.xml
+#logging:
+#  level:
+#    root: info
+#    # Mybatis-Plus 的日志级别配置
+
+#    com.example: debug

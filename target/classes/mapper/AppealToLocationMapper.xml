@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kg.mapper.AppealToLocationMapper">
+
+    <resultMap id="BaseResultMap" type="com.kg.pojo.AppealToLocation">
+            <result property="appealId" column="appeal_id" jdbcType="VARCHAR"/>
+            <result property="locationId" column="location_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        appeal_id,location_id
+    </sql>
+</mapper>
