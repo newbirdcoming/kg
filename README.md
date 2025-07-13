@@ -119,7 +119,7 @@ WHERE {
 
 
 
-#### # 创建新节点 实体隐患，确保格式与现有节点一致
+#### 创建新节点 实体隐患，确保格式与现有节点一致
 
 ```vue
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -139,9 +139,7 @@ BIND(IRI(CONCAT("http://example.org/resource/实体隐患/", STRUUID())) AS ?ent
 }
 ```
 
-#### 
-
-#### # 创建新节点 风险事件，确保格式与现有节点一致
+#### 创建新节点 风险事件，确保格式与现有节点一致
 
 ```vue
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
