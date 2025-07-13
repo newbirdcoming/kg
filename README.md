@@ -1,54 +1,32 @@
 # 1、图谱构建
 
-## 1.1、通过java代码生成数据库文件
+**文件目录**
 
-运行kg服务 打开swagger文档导入excel
+## ![1752398063421](assets/1752398063421.png)1.1、通过java代码生成数据库文件
 
-![img](assets/image.png)
+> 1）导入数据库
+>
+> 2）运行java程序【访问http://localhost:8081/kg/doc.html】
 
-![img](assets/image.png)
+![1752398196281](assets/1752398196281.png)
 
-test是50条从合并中获取的
-
-
-
-## 1.2 生成表结构并配置数据库表
-
-sql存放在 sql文件夹的kg中
-
-
-
-设置数据库
-
-![img](assets/image-1752397646034.png)
-
-
-
-
-
-
+3）基于文档数据到数据库
 
 
 
 ## 1.2根据数据库文件生成图谱文件
 
+**[数据库结构没有修改直接进行1.2.3]**
+
 ### 1.2.1生成映射文件
+
+在d2rq目录下输入下面命令（路径注意修改）
 
 ```vue
 .\generate-mapping -u root -p 1234 -o lanjie_test16.ttl jdbc:mysql:///kg_sixteen?useSSL=false
 ```
 
-### 1.2.2基于已有的ttl文件修改（推荐）【改完直接看1.2.4】
-
-由于数据库结构都一样（没变动情况下）可以直接用模板ttl【model.ttl】修改生成nt文件
-
-![img](assets/image-1752397645979.png)
-
-修改成1.1的数据库名
-
-
-
-### 1.2.3修改映射文件【如果数据库变动了，使用这种方式（如果还不行自己了解原理去修改）】
+### 1.2.2修改映射文件
 
 1）修改时间地点信息。
 
@@ -806,17 +784,19 @@ map:wealth_name a d2rq:PropertyBridge;
 
 
 
-### 1.2.4生成三元组文件
+### 1.2.3生成三元组文件
+
+数据库结构没有变的 修改下model.ttl中的数据库名
+
+![1752398503394](assets/1752398503394.png)
+
+**执行生成图谱文件**
 
 ```vue
 .\dump-rdf -o lanjie_test16.nt  -b http://example.org/resource/  lanjie_test16.ttl
 ```
 
 
-
-ps:三元组关系顺序 hazard--存在参与者--participant
-
-![img](assets/image-1752397646008.png)
 
 ## 1.3、导入到graphDb
 
@@ -829,12 +809,6 @@ ps:三元组关系顺序 hazard--存在参与者--participant
 1.3.2 导入数据
 
 ![img](assets/image-1752397646011.png)
-
-
-
-
-
-
 
 
 
@@ -966,36 +940,44 @@ WHERE {
 
 ## 1.5、规则导入
 
-注意这里的路径为自己电脑的路径
+**注意文件pip路径**
+
+
+
+#### **导入规则**
 
 ```plain
 prefix sys: <http://www.ontotext.com/owlim/system#>
 INSERT DATA {
-    _:b sys:addRuleset <file:c:/graphdb/test-data/test.pie>
+    _:b sys:addRuleset <file:c:/Users/Admin/Desktop/2025-3-23/pie/all.pie>
 }
 ```
 
 
 
+#### **设置默认规则**
+
 ```plain
 prefix sys: <http://www.ontotext.com/owlim/system#>
 INSERT DATA {
-    _:b sys:defaultRuleset "test"
+    _:b sys:defaultRuleset "all"
 }
 ```
 
 
 
-```vue
+#### **加载规则**
+
+```
 prefix sys: <http://www.ontotext.com/owlim/system#>
 INSERT DATA { [] <http://www.ontotext.com/owlim/system#reinfer> [] }
 ```
 
-## 
 
 
+## 1.6、常见查询
 
-## 1.7 、常见查询
+**类型查询**
 
 ```vue
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -1004,13 +986,13 @@ PREFIX ex: <http://example.org/resource/>
 PREFIX gn: <http://www.geonames.org/ontology#>
 SELECT  ?s ?p ?o
 WHERE {
-  ?s vocab:insult_in_risk ?o .
+  ?s vocab:导致 ?o .
   ?s ?p ?o .
   FILTER (isIRI(?s) && !regex(str(?s), "^file:///"))  # 确保主语不是 file URI
 }
 ```
 
-
+**实例查询**
 
 ```vue
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -1019,7 +1001,7 @@ PREFIX ex: <http://example.org/resource/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?s ?p ?o
 WHERE {
-  ?s rdf:type vocab:entity_hazard .  # 替换 ex:YourType 为您想要的具体类型
+  ?s rdf:type vocab:实体隐患 .  # 替换 ex:YourType 为您想要的具体类型
 #  ?s rdf:type rdfs:Class .  # 替换 ex:YourType 为您想要的具体类型  
   ?s ?p ?o . 
   FILTER (isIRI(?s) && !regex(str(?s), "^file:///"))  # 确保主语不是 file URI
@@ -1027,7 +1009,7 @@ WHERE {
 limit 10
 ```
 
-
+**查询实体隐患**
 
 ```vue
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -1041,7 +1023,7 @@ WHERE {
 }
 ```
 
-
+**查询风险事件**
 
 ```vue
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -1055,9 +1037,7 @@ WHERE {
 }
 ```
 
-
-
-
+**查询继承关系**
 
 ```vue
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -1074,71 +1054,7 @@ WHERE {
 
 
 
-```vue
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX vocab: <http://example.org/resource/vocab/>
-PREFIX ex: <http://example.org/resource/>
-PREFIX gn: <http://www.geonames.org/ontology#>
-SELECT  ?s ?p ?o
-WHERE {
-  ?s vocab:insult_in_risk ?o .
-  ?s ?p ?o .
-  FILTER (isIRI(?s) && !regex(str(?s), "^file:///"))  # 确保主语不是 file URI
-}
-```
-
-
-
-```vue
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX vocab: <http://example.org/resource/vocab/>
-PREFIX ex: <http://example.org/resource/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-SELECT DISTINCT ?s ?p ?o
-WHERE {
-  ?s rdf:type vocab:entity_hazard .  # 替换 ex:YourType 为您想要的具体类型
-#  ?s rdf:type rdfs:Class .  # 替换 ex:YourType 为您想要的具体类型  
-  ?s ?p ?o . 
-  FILTER (isIRI(?s) && !regex(str(?s), "^file:///"))  # 确保主语不是 file URI
-}
-limit 10
-```
-
-
-
-```vue
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX vocab: <http://example.org/resource/vocab/>
-PREFIX ex: <http://example.org/resource/>
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-select ?entity_hazard
-WHERE {
-    ?entity_hazard vocab:has_hazard ?hazard .
-    ?entity_hazard vocab:has_entity ?entity .
-}
-```
-
-
-
-```vue
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX vocab: <http://example.org/resource/vocab/>
-PREFIX ex: <http://example.org/resource/>
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-select ?appeal_hazard 
-WHERE {
-    ?appeal_hazard vocab:has_event ?event .
-    ?appeal_hazard vocab:has_risk ?risk .
-}
-```
-
-
-
-
-
-
-
-## 1.8 部分结果展示
+## 1.7、 部分结果展示
 
 ![img](assets/image-1752397646005.png)
 
@@ -1417,16 +1333,6 @@ WHERE {
 
 
 
-
-
-#### 时间段
-
-
-
-
-
-
-
 #### 插入逆向关系：
 
 ```vue
@@ -1532,6 +1438,10 @@ WHERE {
 
 
 
+
+
+#### 添加规则集
+
 ```plain
 prefix sys: <http://www.ontotext.com/owlim/system#>
 INSERT DATA {
@@ -1539,7 +1449,7 @@ INSERT DATA {
 }
 ```
 
-
+#### 查询所有规则
 
 ```vue
 prefix sys: <http://www.ontotext.com/owlim/system#>
@@ -1548,41 +1458,41 @@ SELECT ?state ?ruleset {
 }
 ```
 
-
+#### 查看规则详情
 
 ```vue
 prefix sys: <http://www.ontotext.com/owlim/system#>
 SELECT * {
-    ?content sys:exploreRuleset "test"
+    ?content sys:exploreRuleset "all"
 }
 ```
 
-
+#### 设置默认规则
 
 ```plain
 prefix sys: <http://www.ontotext.com/owlim/system#>
 INSERT DATA {
-    _:b sys:defaultRuleset "test"
+    _:b sys:defaultRuleset "rdfsplus-optimized"
 }
 ```
 
-
+#### 重新加载规则
 
 ```vue
 prefix sys: <http://www.ontotext.com/owlim/system#>
 INSERT DATA { [] <http://www.ontotext.com/owlim/system#reinfer> [] }
 ```
 
-
+#### 删除规则
 
 ```vue
 prefix sys: <http://www.ontotext.com/owlim/system#>
 INSERT DATA {
-    _:b sys:removeRuleset "test"
+    _:b sys:removeRuleset "all"
 }
 ```
 
-### graphDb的样式设置
+**graphDb的样式设置**
 
 ```vue
 PREFIX vocab: <http://example.org/resource/vocab/>
