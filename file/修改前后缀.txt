@@ -1,0 +1,6 @@
+1)将uriPattern " 替换成uriPattern "http://example.org/resource/
+并且加上前缀：@prefix ex: <http://example.org/resource/> .
+2)删除|urlify;
+d2rq:uriPattern "http://example.org/resource/consequences/@@consequences.id|urlify@@";
+d2rq:uriPattern "http://example.org/resource/consequences/@@consequences.id@@";
+3）修改映射关系

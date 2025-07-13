@@ -1,0 +1,90 @@
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix geonames: <http://www.geonames.org/ontology#> .
+Time：
+# Table time
+map:time a d2rq:ClassMap;
+d2rq:dataStorage map:database;
+d2rq:uriPattern "time/@@time.id|urlify@@";
+d2rq:class vocab:time;
+d2rq:classDefinitionLabel "time";
+.
+map:time__label a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:time;
+d2rq:property rdfs:label;
+d2rq:pattern "time #@@time.id@@";
+.
+map:time_id a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:time;
+d2rq:property vocab:time_id;
+d2rq:propertyDefinitionLabel "time id";
+d2rq:column "time.id";
+.
+
+map:time_occurred_at a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:time;
+d2rq:property time:inXSDDateTime;
+d2rq:propertyDefinitionLabel "time occurred_at";
+d2rq:column "time.occurred_at";
+d2rq:datatype xsd:dateTime;
+.
+
+map:time_start_time a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:time;
+d2rq:property time:hasBeginning;
+d2rq:propertyDefinitionLabel "time start_time";
+d2rq:column "time.start_time";
+d2rq:datatype xsd:dateTime;
+.
+map:time_end_time a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:time;
+d2rq:property time:hasEnd;
+d2rq:propertyDefinitionLabel "time end_time";
+d2rq:column "time.end_time";
+d2rq:datatype xsd:dateTime;
+.
+
+
+Location:
+# Table location
+map:location a d2rq:ClassMap;
+d2rq:dataStorage map:database;
+d2rq:uriPattern "location/@@location.id|urlify@@";
+d2rq:class vocab:location;
+d2rq:classDefinitionLabel "location";
+.
+map:location__label a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:location;
+d2rq:property rdfs:label;
+d2rq:pattern "location #@@location.id@@";
+.
+map:location_id a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:location;
+d2rq:property vocab:location_id;
+d2rq:propertyDefinitionLabel "location id";
+d2rq:column "location.id";
+.
+map:location_location a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:location;
+d2rq:property geonames:name;
+d2rq:propertyDefinitionLabel "location location";
+d2rq:column "location.location";
+.
+map:location_latitude a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:location;
+d2rq:property geonames:lat;
+d2rq:propertyDefinitionLabel "location latitude";
+d2rq:column "location.latitude";
+d2rq:datatype xsd:double;
+.
+map:location_longitude a d2rq:PropertyBridge;
+d2rq:belongsToClassMap map:location;
+d2rq:property geonames:long;
+d2rq:propertyDefinitionLabel "location longitude";
+d2rq:column "location.longitude";
+d2rq:datatype xsd:double;
+.
+
+在映射中添加owl-time的时间属性 time:inXSDDateTime  time:hasBeginning time:hasEnd
+
+geonames:name geo:lat location.longitude

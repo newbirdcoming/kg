@@ -1,0 +1,650 @@
+@prefix map: <#> .
+@prefix db: <> .
+@prefix vocab: <vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix geonames: <http://www.geonames.org/ontology#> .
+
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:jdbcDSN "jdbc:mysql:///kg_sixteen?useSSL=false";
+	d2rq:username "root";
+	d2rq:password "1234";
+	jdbc:autoReconnect "true";
+	jdbc:zeroDateTimeBehavior "convertToNull";
+	.
+
+# Table 诉求
+map:appeal a d2rq:ClassMap;
+    d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://example.org/resource/诉求/@@appeal.id@@";
+    d2rq:class vocab:诉求;
+    d2rq:classDefinitionLabel "诉求";
+    .
+
+map:appeal__label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:appeal;
+    d2rq:property rdfs:label;
+    d2rq:pattern "诉求 #@@appeal.id@@";
+    .
+
+map:appeal_id a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:appeal;
+    d2rq:property vocab:诉求id;
+    d2rq:propertyDefinitionLabel "诉求id";
+    d2rq:column "appeal.id";
+    .
+
+map:appeal_number a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:appeal;
+    d2rq:property vocab:诉求编号;
+    d2rq:propertyDefinitionLabel "诉求编号";
+    d2rq:column "appeal.number";
+    .
+
+map:appeal_type1 a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:appeal;
+    d2rq:property vocab:诉求主题类型一;
+    d2rq:propertyDefinitionLabel "诉求主题类型一";
+    d2rq:column "appeal.type1";
+    .
+
+map:appeal_type2 a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:appeal;
+    d2rq:property vocab:诉求主题类型二;
+    d2rq:propertyDefinitionLabel "诉求主题类型二";
+    d2rq:column "appeal.type2";
+    .
+
+map:appeal_type3 a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:appeal;
+    d2rq:property vocab:诉求主题类型三;
+    d2rq:propertyDefinitionLabel "诉求主题类型三";
+    d2rq:column "appeal.type3";
+    .
+
+
+map:appeal_to_collaboration_network__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含协作网络;
+	d2rq:refersToClassMap map:collaboration_network;
+	d2rq:join "appeal_to_collaboration_network.appeal_id => appeal.id";
+	d2rq:join "appeal_to_collaboration_network.network_id => collaboration_network.id";
+	.
+
+# Table appeal_to_collaboration_network_activity (n:m)
+map:appeal_to_collaboration_network_activity__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含协作网络活动;
+	d2rq:refersToClassMap map:collaboration_network_activity;
+	d2rq:join "appeal_to_collaboration_network_activity.activity_id => collaboration_network_activity.id";
+	d2rq:join "appeal_to_collaboration_network_activity.appeal_id => appeal.id";
+	.
+
+
+# Table appeal_to_consequence (n:m)
+map:appeal_to_consequence__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含后果;
+	d2rq:refersToClassMap map:consequence;
+	d2rq:join "appeal_to_consequence.appeal_id => appeal.id";
+	d2rq:join "appeal_to_consequence.consequence_id => consequence.id";
+	.
+
+# Table appeal_to_entity (n:m)
+map:appeal_to_entity__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含实体;
+	d2rq:refersToClassMap map:entity;
+	d2rq:join "appeal_to_entity.entity_id => entity.id";
+	d2rq:join "appeal_to_entity.appeal_id => appeal.id";
+	.
+
+# Table appeal_to_event (n:m)
+map:appeal_to_event__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含事件;
+	d2rq:refersToClassMap map:event;
+	d2rq:join "appeal_to_event.appeal_id => appeal.id";
+	d2rq:join "appeal_to_event.event_id => event.id";
+	.
+
+# Table appeal_to_hazard (n:m)
+map:appeal_to_hazard__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含隐患;
+	d2rq:refersToClassMap map:hazard;
+	d2rq:join "appeal_to_hazard.hazard_id => hazard.id";
+	d2rq:join "appeal_to_hazard.appeal_id => appeal.id";
+	.
+
+# Table appeal_to_location (n:m)
+map:appeal_to_location__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:所在地;
+	d2rq:refersToClassMap map:location;
+	d2rq:join "appeal_to_location.appeal_id => appeal.id";
+	d2rq:join "appeal_to_location.location_id => location.id";
+	.
+
+
+#参与者—地点	
+# Table participant_to_location (n:m)
+map:participant_to_location__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property vocab:所在地;
+	d2rq:refersToClassMap map:location;
+	d2rq:join "participant_to_location.participant_id => participant.id";
+	d2rq:join "participant_to_location.location_id => location.id";
+	.
+	
+#协作网络—地点	
+# Table collaborative_to_location (n:m)
+map:collaborative_to_location__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:collaboration_network;
+	d2rq:property vocab:所在地;
+	d2rq:refersToClassMap map:location;
+	d2rq:join "collaborative_to_location.network_id => collaboration_network.id";
+	d2rq:join "collaborative_to_location.location_id => location.id";
+	.
+
+# Table appeal_to_participant (n:m)
+map:appeal_to_participant__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含参与者;
+	d2rq:refersToClassMap map:participant;
+	d2rq:join "appeal_to_participant.appeal_id => appeal.id";
+	d2rq:join "appeal_to_participant.participant_id => participant.id";
+	.
+
+# Table appeal_to_participant_activity (n:m)
+map:appeal_to_participant_activity__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含参与者活动;
+	d2rq:refersToClassMap map:participant_activity;
+	d2rq:join "appeal_to_participant_activity.activity_id => participant_activity.id";
+	d2rq:join "appeal_to_participant_activity.appeal_id => appeal.id";
+	.
+
+# Table appeal_to_risk (n:m)
+map:appeal_to_risk__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含风险;
+	d2rq:refersToClassMap map:risk;
+	d2rq:join "appeal_to_risk.appeal_id => appeal.id";
+	d2rq:join "appeal_to_risk.risk_id => risk.id";
+	.
+
+# Table appeal_to_time (n:m)
+map:appeal_to_time__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:发生时间;
+	d2rq:refersToClassMap map:time;
+	d2rq:join "appeal_to_time.appeal_id => appeal.id";
+	d2rq:join "appeal_to_time.time_id => time.id";
+	.
+
+# Table appeal_to_wealth (n:m)
+map:appeal_to_wealth__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:appeal;
+	d2rq:property vocab:包含资源;
+	d2rq:refersToClassMap map:wealth;
+	d2rq:join "appeal_to_wealth.wealth_id => wealth.id";
+	d2rq:join "appeal_to_wealth.appeal_id => appeal.id";
+	.
+
+# Table 协作网络
+map:collaboration_network a d2rq:ClassMap;
+    d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://example.org/resource/协作网络/@@collaboration_network.id@@";
+    d2rq:class vocab:协作网络;
+    d2rq:classDefinitionLabel "协作网络";
+    .
+
+map:collaboration_network__label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:collaboration_network;
+    d2rq:property rdfs:label;
+    d2rq:pattern "协作网络 #@@collaboration_network.id@@";
+    .
+
+map:collaboration_network_id a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:collaboration_network;
+    d2rq:property vocab:协作网络id;
+    d2rq:propertyDefinitionLabel "协作网络id";
+    d2rq:column "collaboration_network.id";
+    .
+
+map:collaboration_network_name a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:collaboration_network;
+    d2rq:property vocab:协作网络名称;
+    d2rq:propertyDefinitionLabel "协作网络名称";
+    d2rq:column "collaboration_network.name";
+    .
+
+
+# Table 协作网络活动
+map:collaboration_network_activity a d2rq:ClassMap;
+    d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://example.org/resource/协作网络活动/@@collaboration_network_activity.id@@";
+    d2rq:class vocab:协作网络活动;
+    d2rq:classDefinitionLabel "协作网络活动";
+    .
+
+map:collaboration_network_activity__label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:collaboration_network_activity;
+    d2rq:property rdfs:label;
+    d2rq:pattern "协作网络活动 #@@collaboration_network_activity.id@@";
+    .
+
+map:collaboration_network_activity_id a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:collaboration_network_activity;
+    d2rq:property vocab:协作网络活动id;
+    d2rq:propertyDefinitionLabel "协作网络活动id";
+    d2rq:column "collaboration_network_activity.id";
+    .
+
+map:collaboration_network_activity_name a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:collaboration_network_activity;
+    d2rq:property vocab:协作网络活动名称;
+    d2rq:propertyDefinitionLabel "协作网络活动名称";
+    d2rq:column "collaboration_network_activity.name";
+    .
+
+
+# Table collaborative_activity (n:m)
+map:collaborative_activity__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:collaboration_network;
+	d2rq:property vocab:协作活动;
+	d2rq:refersToClassMap map:collaboration_network_activity;
+	d2rq:join "collaborative_activity.network_id => collaboration_network.id";
+	d2rq:join "collaborative_activity.activity_id => collaboration_network_activity.id";
+	.
+
+# Table conduct (n:m)
+map:conduct__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property vocab:进行;
+	d2rq:refersToClassMap map:participant_activity;
+	d2rq:join "conduct.participant_id => participant.id";
+	d2rq:join "conduct.activity_id => participant_activity.id";
+	.
+
+# Table consequence 后果
+map:consequence a d2rq:ClassMap;
+    d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://example.org/resource/后果/@@consequence.id@@";
+    d2rq:class vocab:后果;
+    d2rq:classDefinitionLabel "后果";
+    .
+
+map:consequence__label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:consequence;
+    d2rq:property rdfs:label;
+    d2rq:pattern "后果 #@@consequence.id@@";
+    .
+
+map:consequence_id a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:consequence;
+    d2rq:property vocab:后果id;
+    d2rq:propertyDefinitionLabel "后果id";
+    d2rq:column "consequence.id";
+    .
+
+map:consequence_name a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:consequence;
+    d2rq:property vocab:后果描述;
+    d2rq:propertyDefinitionLabel "后果描述";
+    d2rq:column "consequence.name";
+    .
+
+
+# Table cooperation (n:m)
+map:cooperation__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property vocab:协作;
+	d2rq:refersToClassMap map:collaboration_network;
+	d2rq:join "cooperation.participant_id => participant.id";
+	d2rq:join "cooperation.network_id => collaboration_network.id";
+	.
+
+# Table employ (n:m)
+map:employ__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property vocab:使用;
+	d2rq:refersToClassMap map:wealth;
+	d2rq:join "employ.wealth_id => wealth.id";
+	d2rq:join "employ.participant_id => participant.id";
+	.
+
+# Table entity 实体
+map:entity a d2rq:ClassMap;
+    d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://example.org/resource/实体/@@entity.id@@";
+    d2rq:class vocab:实体;
+    d2rq:classDefinitionLabel "实体";
+    .
+
+map:entity__label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:entity;
+    d2rq:property rdfs:label;
+    d2rq:pattern "实体 #@@entity.id@@";
+    .
+
+map:entity_id a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:entity;
+    d2rq:property vocab:实体id;
+    d2rq:propertyDefinitionLabel "实体id";
+    d2rq:column "entity.id";
+    .
+
+map:entity_subject a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:entity;
+    d2rq:property vocab:主体对象;
+    d2rq:propertyDefinitionLabel "主体";
+    d2rq:column "entity.subject";
+    .
+
+map:entity_object a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:entity;
+    d2rq:property vocab:受体对象;
+    d2rq:propertyDefinitionLabel "受体";
+    d2rq:column "entity.object";
+    .
+
+
+# Table event 事件
+map:event a d2rq:ClassMap;
+    d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://example.org/resource/事件/@@event.id@@";
+    d2rq:class vocab:事件;
+    d2rq:classDefinitionLabel "事件";
+    .
+
+map:event__label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:event;
+    d2rq:property rdfs:label;
+    d2rq:pattern "事件 #@@event.id@@";
+    .
+
+map:event_id a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:event;
+    d2rq:property vocab:事件id;
+    d2rq:propertyDefinitionLabel "事件id";
+    d2rq:column "event.id";
+    .
+
+map:event_name a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:event;
+    d2rq:property vocab:事件描述;
+    d2rq:propertyDefinitionLabel "事件描述";
+    d2rq:column "event.name";
+    .
+
+# Table exist_participant (n:m)
+map:exist_participant__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property vocab:存在参与者;
+	d2rq:refersToClassMap map:hazard;
+	d2rq:join "exist_participant.participant_id => participant.id";
+	d2rq:join "exist_participant.hazard_id => hazard.id";
+	.
+
+# Table exist_risk (n:m)
+map:exist_risk__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:hazard;
+	d2rq:property vocab:存在风险;
+	d2rq:refersToClassMap map:risk;
+	d2rq:join "exist_risk.hazard_id => hazard.id";
+	d2rq:join "exist_risk.risk_id => risk.id";
+	.
+
+# Table hazard
+map:hazard a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://example.org/resource/隐患/@@hazard.id@@";
+	d2rq:class vocab:隐患;
+	d2rq:classDefinitionLabel "隐患";
+	.
+map:hazard__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:hazard;
+	d2rq:property rdfs:label;
+	d2rq:pattern "隐患 #@@hazard.id@@";
+	.
+map:hazard_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:hazard;
+	d2rq:property vocab:隐患id;
+	d2rq:propertyDefinitionLabel "隐患id";
+	d2rq:column "hazard.id";
+	.
+map:hazard_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:hazard;
+	d2rq:property vocab:隐患名称;
+	d2rq:propertyDefinitionLabel "隐患名称";
+	d2rq:column "hazard.name";
+	.
+
+# Table leads_to (n:m)
+map:leads_to__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:event;
+	d2rq:property vocab:导致;
+	d2rq:refersToClassMap map:consequence;
+	d2rq:join "leads_to.consequence_id => consequence.id";
+	d2rq:join "leads_to.event_id => event.id";
+	.
+
+# Table location
+map:location a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "地点/@@location.id|urlify@@";
+	d2rq:class vocab:地点;
+	d2rq:classDefinitionLabel "地点";
+	.
+map:location__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:location;
+	d2rq:property rdfs:label;
+	d2rq:pattern "地点 #@@location.id@@";
+	.
+map:location_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:location;
+	d2rq:property vocab:地点id;
+	d2rq:propertyDefinitionLabel "地点id";
+	d2rq:column "location.id";
+	.
+map:location_location a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:location;
+    d2rq:property geonames:name;
+	d2rq:propertyDefinitionLabel "location location";
+	d2rq:column "location.location";
+	.
+map:location_latitude a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:location;
+	d2rq:property geonames:lat;
+	d2rq:propertyDefinitionLabel "location latitude";
+	d2rq:column "location.latitude";
+	d2rq:datatype xsd:double;
+	.
+map:location_longitude a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:location;
+    d2rq:property geonames:long;
+	d2rq:propertyDefinitionLabel "location longitude";
+	d2rq:column "location.longitude";
+	d2rq:datatype xsd:double;
+	.
+
+# Table may_trigger (n:m)
+map:may_trigger__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:event;
+	d2rq:property vocab:可能触发;
+	d2rq:refersToClassMap map:risk;
+	d2rq:join "may_trigger.event_id => event.id";
+	d2rq:join "may_trigger.risk_id => risk.id";
+	.
+
+# Table participant
+map:participant a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://example.org/resource/参与者/@@participant.id@@";
+	d2rq:class vocab:参与者;
+	d2rq:classDefinitionLabel "参与者";
+	.
+map:participant__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property rdfs:label;
+	d2rq:pattern "参与者 #@@participant.id@@";
+	.
+map:participant_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property vocab:参与者id;
+	d2rq:propertyDefinitionLabel "参与者id";
+	d2rq:column "participant.id";
+	.
+map:participant_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant;
+	d2rq:property vocab:参与者姓名;
+	d2rq:propertyDefinitionLabel "参与者姓名";
+	d2rq:column "participant.name";
+	.
+
+# Table 参与者活动
+map:participant_activity a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://example.org/resource/参与者活动/@@participant_activity.id@@";
+	d2rq:class vocab:参与者活动;
+	d2rq:classDefinitionLabel "参与者活动";
+	.
+map:participant_activity__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant_activity;
+	d2rq:property rdfs:label;
+	d2rq:pattern "参与者活动 #@@participant_activity.id@@";
+	.
+map:participant_activity_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant_activity;
+	d2rq:property vocab:参与者活动id;
+	d2rq:propertyDefinitionLabel "参与者活动id";
+	d2rq:column "participant_activity.id";
+	.
+map:participant_activity_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:participant_activity;
+	d2rq:property vocab:参与者活动名;
+	d2rq:propertyDefinitionLabel "参与者活动名";
+	d2rq:column "participant_activity.name";
+	.
+
+# Table 风险
+map:risk a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://example.org/resource/风险/@@risk.id@@";
+	d2rq:class vocab:风险;
+	d2rq:classDefinitionLabel "风险";
+	.
+map:risk__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:risk;
+	d2rq:property rdfs:label;
+	d2rq:pattern "风险 #@@risk.id@@";
+	.
+map:risk_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:risk;
+	d2rq:property vocab:风险id;
+	d2rq:propertyDefinitionLabel "风险id";
+	d2rq:column "risk.id";
+	.
+map:risk_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:risk;
+	d2rq:property vocab:风险名称;
+	d2rq:propertyDefinitionLabel "风险名";
+	d2rq:column "risk.name";
+	.
+
+# Table susceptible_to (n:m)
+map:susceptible_to__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:entity;
+	d2rq:property vocab:易感于;
+	d2rq:refersToClassMap map:hazard;
+	d2rq:join "susceptible_to.hazard_id => hazard.id";
+	d2rq:join "susceptible_to.entity_id => entity.id";
+	.
+
+# Table time
+map:time a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "时间/@@time.id|urlify@@";
+	d2rq:class vocab:时间;
+	d2rq:classDefinitionLabel "时间";
+	.
+map:time__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:time;
+	d2rq:property rdfs:label;
+	d2rq:pattern "时间 #@@time.id@@";
+	.
+map:time_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:time;
+	d2rq:property vocab:时间id;
+	d2rq:propertyDefinitionLabel "时间id";
+	d2rq:column "time.id";
+	.
+	
+map:time_occurred_at a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:time;
+	d2rq:property time:inXSDDateTime;
+	d2rq:propertyDefinitionLabel "time occurred_at";
+	d2rq:column "time.occurred_at";
+	d2rq:datatype xsd:dateTime;
+	.
+	
+map:time_start_time a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:time;
+    d2rq:property time:hasBeginning;
+	d2rq:propertyDefinitionLabel "time start_time";
+	d2rq:column "time.start_time";
+	d2rq:datatype xsd:dateTime;
+	.
+map:time_end_time a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:time;
+    d2rq:property time:hasEnd;
+	d2rq:propertyDefinitionLabel "time end_time";
+	d2rq:column "time.end_time";
+	d2rq:datatype xsd:dateTime;
+	.
+
+
+# Table 资源
+map:wealth a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "http://example.org/resource/资源/@@wealth.id@@";
+	d2rq:class vocab:资源;
+	d2rq:classDefinitionLabel "资源";
+	.
+map:wealth__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:wealth;
+	d2rq:property rdfs:label;
+	d2rq:pattern "资源 #@@wealth.id@@";
+	.
+map:wealth_id a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:wealth;
+	d2rq:property vocab:资源id;
+	d2rq:propertyDefinitionLabel "资源id";
+	d2rq:column "wealth.id";
+	.
+map:wealth_name a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:wealth;
+	d2rq:property vocab:资源名;
+	d2rq:propertyDefinitionLabel "资源名";
+	d2rq:column "wealth.name";
+	.
+
+### 1.2.3 生成三元组文件
+
+数据库结构没有变的 修改下model.ttl中的数据库名
+
+![1752398503394](assets/1752398503394.png)
+
+**执行生成图谱文件**
+
+```vue
+.\dump-rdf -o lanjie_test16.nt  -b http://example.org/resource/  lanjie_test16.ttl
